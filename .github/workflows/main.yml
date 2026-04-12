@@ -5,7 +5,7 @@ push:
 branches: [ "main" ]
 
 jobs:
-build:zr
+build: zr
 runs-on: ubuntu-latest
 
 steps:
