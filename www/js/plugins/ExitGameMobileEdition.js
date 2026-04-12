@@ -22,24 +22,32 @@
 
     var textExit = String(params['ButtonText'] || 'Wyjście z gry');
 
-    var performExit = function() {
+    var tryExitApp = function() {
         try {
-            if (navigator.app && navigator.app.exitApp) {
+            if (window.cordova && navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
-            } else if (navigator.device && navigator.device.exitApp) {
-                navigator.device.exitApp();
-            } else {
-                window.open('', '_self');
-                window.close();
+                return;
             }
+            if (window.cordova && navigator.device && navigator.device.exitApp) {
+                navigator.device.exitApp();
+                return;
+            }
+            SceneManager.terminate();
+            window.location.href = "about:blank";
         } catch (e) {}
+    };
+
+    var performExit = function() {
+        AudioManager.stopAll();
+        SceneManager.goto(Scene_Title);
+        setTimeout(function() {
+            tryExitApp();
+        }, 50);
     };
 
     Window_TitleCommand.prototype.makeCommandList = function() {
         windowTitleCommandList.call(this);
-        if (!this._list.some(c => c.symbol === 'exitGame')) {
-            this.addCommand(textExit, 'exitGame');
-        }
+        this.addCommand(textExit, 'exitGame', true);
     };
 
     Scene_Title.prototype.createCommandWindow = function () {
@@ -55,7 +63,7 @@
 
     Window_GameEnd.prototype.makeCommandList = function() {
         windowGameEndCommandList.call(this);
-        this.addCommand(textExit, 'exitGame');
+        this.addCommand(textExit, 'exitGame', true);
     };
 
     Scene_GameEnd.prototype.createCommandWindow = function() {
