@@ -1,0 +1,92 @@
+/*:
+ * @plugindesc [MV] Absolute Touch UI v7.0 - Nowa ikona Menu i ostateczny fix ucinania.
+ * @author GalaxyLIVAN
+ */
+
+(function() {
+    'use strict';
+
+    function Livan_HTML_Touch() {
+        this._buttonElement = null;
+    }
+
+    Livan_HTML_Touch.init = function() {
+        if (this._buttonElement) return;
+
+        this._buttonElement = document.createElement('div');
+        this._buttonElement.id = 'livan-touch-button';
+        
+        const style = this._buttonElement.style;
+        style.position = 'absolute';
+        style.top = '10px';
+        style.right = '10px';
+        style.zIndex = '10000';
+        style.cursor = 'pointer';
+        style.backgroundImage = "url('img/system/ButtonSet.png')";
+        style.backgroundRepeat = 'no-repeat';
+        
+        // Wymuszamy rozmiar arkusza, aby każda klatka miała 48x48
+        style.backgroundSize = '576px 96px'; 
+        style.display = 'none';
+
+        this._buttonElement.onclick = (e) => {
+            e.preventDefault();
+            this.onClick();
+        };
+
+        document.body.appendChild(this._buttonElement);
+    };
+
+    Livan_HTML_Touch.onClick = function() {
+        const scene = SceneManager._scene;
+        if (!scene) return;
+
+        if (scene instanceof Scene_Map) {
+            SoundManager.playOk();
+            SceneManager.push(Scene_Menu);
+        } else {
+            SoundManager.playCancel();
+            SceneManager.pop();
+        }
+    };
+
+    Livan_HTML_Touch.update = function() {
+        const scene = SceneManager._scene;
+        if (!scene || scene instanceof Scene_Title || scene instanceof Scene_Boot) {
+            if (this._buttonElement) this._buttonElement.style.display = 'none';
+            return;
+        }
+
+        if (this._buttonElement) {
+            const style = this._buttonElement.style;
+            style.display = 'block';
+            
+            // Czyścimy height, aby upewnić się, że zawsze jest 48px
+            style.height = '48px';
+
+            if (scene instanceof Scene_Map) {
+                // GAMEPLAY: Mała ikona (trzy paski - załącznik 2)
+                style.width = '48px';
+                // 432px to początek 10. ikony (paski) w ButtonSet
+                style.backgroundPosition = '-432px 0px';
+            } else {
+                // MENU/INFO: Strzałka powrotu (96px szerokości)
+                style.width = '96px';
+                style.backgroundPosition = '0px 0px';
+            }
+        }
+    };
+
+    const _Scene_Boot_create = Scene_Boot.prototype.create;
+    Scene_Boot.prototype.create = function() {
+        _Scene_Boot_create.call(this);
+        Livan_HTML_Touch.init();
+    };
+
+    const _Scene_Base_update = Scene_Base.prototype.update;
+    Scene_Base.prototype.update = function() {
+        _Scene_Base_update.call(this);
+        Livan_HTML_Touch.update();
+    };
+
+})();

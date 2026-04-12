@@ -43,7 +43,7 @@
 
     Scene_Info.prototype.create = function() {
         Scene_MenuBase.prototype.create.call(this);
-        var text = "Dzień z Życia Teklaga - Wersja 2.0.2 (Wersja Android 1.0 Beta) \nTwórcy Gry:\n Główny Twórca: enotekk\n Pomoc w Grafice: Kassper\n Twórcy mobilnego portu: Chruscik1, GalaxyLIVAN\n Muzykę stworzył: Wopsiak oraz Im5hadow\n\nVoice Aktorzy: Feles, enotekk, Kassper\n\nLetimotywy: Toby Fox, George Buzinkai\n\nAutorzy pluginów: GalaxyLIVAN, KYDSGAME,\n\nMiłej Gry!";
+        var text = "Dzień z Życia Teklaga - Wersja 2.0.2 (Wersja Android 1.1 Beta) \nTwórcy Gry:\n Główny Twórca: enotekk\n Pomoc w Grafice: Kassper\n Twórcy mobilnego portu: Chruscik1, GalaxyLIVAN\n Muzykę stworzył: Wopsiak oraz Im5hadow\n\nVoice Aktorzy: Feles, enotekk, Kassper\n\nLetimotywy: Toby Fox, George Buzinkai\n\nAutorzy pluginów: GalaxyLIVAN, KYDSGAME,\n\nMiłej Gry!";
         
         this._infoWindow = new Window_Base(0, 0, Graphics.boxWidth, Graphics.boxHeight);
         this._infoWindow.drawTextEx(text, 10, 10);
