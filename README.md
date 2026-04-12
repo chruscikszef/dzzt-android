@@ -15,6 +15,6 @@ Release:
 cordova prepare
 cordova build --release
 ```
-Wygeneruje to .aab który nie jest gotowy do instalacji.
+Wygeneruje to Android App Bundle (.aab) który nie jest gotowy do instalacji.
 
 INFO: Gradle musi być w PATH.
