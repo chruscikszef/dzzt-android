@@ -1,6 +1,9 @@
 # dzzt-android
 Port "Dzień z życia TekLaga" na Androida
 
+Status:
+![build](https://github.com/chruscikszef/dzzt-android/actions/workflows/android.yml/badge.svg)
+
 ## Kompilacja
 Wymagany jest Gradle 8.7 i Android Studio z SDK w wersji 33.0.2.
 Kompilacja na Windowsie nie jest testowana.
