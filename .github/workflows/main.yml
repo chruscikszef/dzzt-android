@@ -51,7 +51,10 @@ jobs:
         run: gradle -v
 
       - name: Build APK
-        run: cordova build android
+        run: |
+          cordova platform add android@12
+          cordova prepare
+          cordova build android
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
