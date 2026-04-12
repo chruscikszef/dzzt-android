@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.chruscik.dzztandroid" version="1.0-beta" xmlns="http://www.w3.org/ns/widgets">
+    <name>Dzień z życia TekLaga</name>
+    <description>
+        Nieoficjalny port wersji na Androida. (Wersja testowa)
+    </description>
+    <author email="chruscik1337@proton.me">
+        Chruścik
+    </author>
+
+	<preference name="Orientation" value="landscape" />
+	<preference name="Fullscreen" value="true" />
+	<preference name="android-minSdkVersion" value="21" />
+	<preference name="android-compileSdkVersion" value="34" />
+	<preference name="android-targetSdkVersion" value="34" />
+
+	<platform name="android">
+    	<edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+        	<intent-filter xmlns:android="http://schemas.android.com/apk/res/android">
+            	<action android:name="android.intent.action.MAIN" />
+            	<category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        	</intent-filter>
+    	</edit-config>
+	</platform>
+	
+	<icon src="res/icon/android/teklag-icon.png" />
+	<access origin="*" />
+    
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+</widget>

@@ -1,0 +1,86 @@
+/*:
+ * @plugindesc System autozapisu w stylu RPG Maker MZ (zapis po mapie, walce i przedmiocie).
+ * @author GalaxyLIVAN
+ *
+ * @param Option Name
+ * @text Nazwa w opcjach
+ * @desc Jak ma się nazywać przełącznik autozapisu w menu?
+ * @default Autozapis
+ *
+ * @param Autosave ID
+ * @text ID slotu autozapisu
+ * @desc Numer slotu, w którym gra będzie się zapisywać (np. 1).
+ * @type number
+ * @default 1
+ *
+ * @help
+ * Plugin automatycznie zapisuje grę:
+ * 1. Po zmianie mapy (przejście między pomieszczeniami).
+ * 2. Po wygranej walce.
+ * 3. Po otrzymaniu przedmiotu/broni/zbroi.
+ *
+ * Gracz może kontrolować tę funkcję w menu opcji.
+ */
+
+(function() {
+    var parameters = PluginManager.parameters('AutosaveSystem');
+    var optionName = String(parameters['Option Name'] || 'Autozapis');
+    var autosaveId = Number(parameters['Autosave ID'] || 1);
+
+    // --- Konfiguracja w menu opcji ---
+    ConfigManager.enableAutosave = true;
+
+    var _ConfigManager_makeData = ConfigManager.makeData;
+    ConfigManager.makeData = function() {
+        var config = _ConfigManager_makeData.call(this);
+        config.enableAutosave = this.enableAutosave;
+        return config;
+    };
+
+    var _ConfigManager_applyData = ConfigManager.applyData;
+    ConfigManager.applyData = function(config) {
+        _ConfigManager_applyData.call(this, config);
+        this.enableAutosave = this.readFlag(config, 'enableAutosave');
+    };
+
+    var _Window_Options_addGeneralOptions = Window_Options.prototype.addGeneralOptions;
+    Window_Options.prototype.addGeneralOptions = function() {
+        _Window_Options_addGeneralOptions.call(this);
+        this.addCommand(optionName, 'enableAutosave');
+    };
+
+    // --- Funkcja wykonująca autozapis w tle ---
+    SceneManager.doAutosave = function() {
+        if (ConfigManager.enableAutosave && !$gameParty.inBattle()) {
+            $gameSystem.onBeforeSave();
+            if (DataManager.saveGame(autosaveId)) {
+                StorageManager.cleanBackup(autosaveId);
+            }
+        }
+    };
+
+    // --- TRIGGER 1: Zmiana pomieszczenia (Mapy) ---
+    var _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
+    Scene_Map.prototype.onMapLoaded = function() {
+        _Scene_Map_onMapLoaded.call(this);
+        SceneManager.doAutosave();
+    };
+
+    // --- TRIGGER 2: Po walce ---
+    var _BattleManager_processVictory = BattleManager.processVictory;
+    BattleManager.processVictory = function() {
+        _BattleManager_processVictory.call(this);
+        SceneManager.doAutosave();
+    };
+
+    // --- TRIGGER 3: Po zdobyciu przedmiotu ---
+    var _Game_Party_gainItem = Game_Party.prototype.gainItem;
+    Game_Party.prototype.gainItem = function(item, amount, includeEquip) {
+        _Game_Party_gainItem.call(this, item, amount, includeEquip);
+        // Zapisuj tylko jeśli ilość przedmiotów wzrosła
+        if (amount > 0 && SceneManager._scene instanceof Scene_Map) {
+            SceneManager.doAutosave();
+        }
+    };
+
+})();

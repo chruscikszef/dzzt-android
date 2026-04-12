@@ -1,0 +1,72 @@
+/*:
+ * @plugindesc Pozwala przełączać czcionkę między domyślną a Jersey25-Regular w menu opcji.
+ * @author GalaxyLIVAN
+ *
+ * @param Option Name
+ * @text Nazwa w opcjach
+ * @desc Jak ma się nazywać przełącznik czcionki w menu?
+ * @default Alternatywna czcionka
+ *
+ * @param Jersey Font Name
+ * @text Nazwa pliku Jersey
+ * @desc Nazwa pliku czcionki (z rozszerzeniem, np. Jersey25-Regular.ttf)
+ * @default Jersey25-Regular.ttf
+ *
+ * @help
+ * 1. Umieść plik Jersey25-Regular.ttf w folderze: fonts/ Twojego projektu.
+ * 2. Włącz plugin i ustaw nazwę w parametrach.
+ * 3. W menu Opcje pojawi się przełącznik.
+ * * UWAGA: Zmiana czcionki w RPG Maker MV najlepiej działa po restarcie 
+ * danej sceny (np. wyjściu i wejściu do menu).
+ */
+
+(function() {
+    var parameters = PluginManager.parameters('ToggleFontJersey');
+    var optionName = String(parameters['Option Name'] || 'Alternatywna czcionka');
+    var jerseyFile = String(parameters['Jersey Font Name'] || 'Jersey25-Regular.ttf');
+
+    // --- Ładowanie czcionki do systemu ---
+    Graphics.loadFont('JerseyFont', 'fonts/' + jerseyFile);
+
+    // --- Konfiguracja zapisu opcji ---
+    ConfigManager.useJerseyFont = false;
+
+    var _ConfigManager_makeData = ConfigManager.makeData;
+    ConfigManager.makeData = function() {
+        var config = _ConfigManager_makeData.call(this);
+        config.useJerseyFont = this.useJerseyFont;
+        return config;
+    };
+
+    var _ConfigManager_applyData = ConfigManager.applyData;
+    ConfigManager.applyData = function(config) {
+        _ConfigManager_applyData.call(this, config);
+        this.useJerseyFont = this.readFlag(config, 'useJerseyFont');
+    };
+
+    // --- Dodanie do menu Opcje ---
+    var _Window_Options_addGeneralOptions = Window_Options.prototype.addGeneralOptions;
+    Window_Options.prototype.addGeneralOptions = function() {
+        _Window_Options_addGeneralOptions.call(this);
+        this.addCommand(optionName, 'useJerseyFont');
+    };
+
+    // --- Podmiana czcionki w locie ---
+    var _Window_Base_standardFontFace = Window_Base.prototype.standardFontFace;
+    Window_Base.prototype.standardFontFace = function() {
+        if (ConfigManager.useJerseyFont) {
+            return 'JerseyFont, ' + _Window_Base_standardFontFace.call(this);
+        }
+        return _Window_Base_standardFontFace.call(this);
+    };
+
+    // Wymuszenie odświeżenia czcionki głównej (np. dla komunikatów)
+    var _Scene_Boot_terminate = Scene_Boot.prototype.terminate;
+    Scene_Boot.prototype.terminate = function() {
+        _Scene_Boot_terminate.call(this);
+        if (ConfigManager.useJerseyFont) {
+            Graphics.fontFace = 'JerseyFont, GameFont';
+        }
+    };
+
+})();
