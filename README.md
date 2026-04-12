@@ -2,6 +2,7 @@
 Port "Dzień z życia TekLaga" na Androida
 
 Status:
+
 ![build](https://github.com/chruscikszef/dzzt-android/actions/workflows/main.yml/badge.svg)
 
 ## Kompilacja
