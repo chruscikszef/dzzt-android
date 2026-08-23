@@ -75,26 +75,23 @@
 
     Window_InfoScroll.prototype.initialize = function() {
         // NAPRAWIONY TEKST (Dodane brakujące cudzysłowy i plusy)
-        this._fullText = "Dzień z Życia Teklaga - Wersja 2.0.2 (Wersja Android 1.1 Beta) \n\n" +
+        this._fullText = "Dzień z Życia Teklaga - Wersja 3.0.0 (Wersja Android 2.0) \n\n" +
                          "Twórcy Gry:\n" +
                          " Główny Twórca: enotekk\n" +
-                         " Pomoc w Grafice: Kassper\n" +
+                         " Grafiki: Demencja, Lula, Kassper\n" +
+						 " Korekta: Karambito\n" +
                          " Twórcy mobilnego portu: Chruscik1, GalaxyLIVAN\n" +
                          " Muzykę stworzył: Wopsiak oraz Im5hadow\n\n" +
-                         "Voice Aktorzy:\n Feles, enotekk, Kassper\n\n" +
+                         "Voice Aktorzy:\n Feles, Kassper, Karambito\n\n" +
                          "Letimotywy:\n Toby Fox, George Buzinkai\n\n" +
-                         "Autorzy pluginów:\n GalaxyLIVAN, KYDSGAME, Brian Howard\n\n" +
+                         "Autorzy pluginów:\n GalaxyLIVAN, KYDSGAME, Brian Howard, enotekk\n\n" +
                          "Sterowanie: Dotykowe, wejście do menu poprzez guzik lub\n" +
                          "poprzez dwukrotne stuknięcie palcem (tak samo powrót)\n\n" +
-                         "Zmiany w Wersji Android 1.1 Beta:\n" +
-                         " - Dodano opcję proporcji 16:9 (jako alternatywę dla\n" +
-                         " dopasowania ekranu (czasami to dziwnie wyglądało))\n" +
-                         " - Dodano dotykowe przyciski dzięki czemu dotykowe sterowanie\n" +
-                         " będzie przyjemniejsze\n" +
-                         " - Dodano przewijaną stronę z informacjami\n" + 
-                         " (właśnie to czytasz)\n" +
-                         " - Naprawiono opcję wyjścia z gry\n" +
-                         " - Oraz poprawiono parę innych pomniejszych pierdółek\n" +
+                         "Zmiany w Wersji Android 2.0:\n" +
+                         " - Zaaktualizowano wersję gry w porcie\n" +
+						 " - Poprawiono działanie funkcji 16:9 i dopasowania ekranu\n" +
+						 " - Dodano opcję dotyczącą rozmycia ekranu\n" +
+						 " - Naprawiono parę błędów\n" +
                          "I to by było narazie na tyle!\n\n" +
                          "Miłej Gry!";
 

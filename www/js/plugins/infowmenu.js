@@ -25,9 +25,9 @@
 
 (function() {
 
-    var parameters = PluginManager.parameters('infowmenu');
-    var authorText = String(parameters['Author Text'] || "");
-    var versionText = String(parameters['Version Text'] || "Wersja 1.0");
+    var parameters = PluginManager.parameters('TitleExtraTextMV');
+    var authorText = String(parameters['Author Text'] || "Twórcy portu: Chruscik1, GalaxyLIVAN");
+    var versionText = String(parameters['Version Text'] || "Wersja 3.0.0 (Android 2.0)");
     var fontSize = Number(parameters['Font Size'] || 22);
 
     // --- Dodanie napisu na scenę tytułową ---

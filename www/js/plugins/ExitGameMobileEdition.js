@@ -19,51 +19,46 @@
     var windowTitleCommandList = Window_TitleCommand.prototype.makeCommandList;
     var sceneGameEndWindow = Scene_GameEnd.prototype.createCommandWindow;
     var windowGameEndCommandList = Window_GameEnd.prototype.makeCommandList;
-
+    
+    // Zmieniono domyślny fallback z 'Exit' na 'Wyjście z gry'
     var textExit = String(params['ButtonText'] || 'Wyjście z gry');
 
-    var tryExitApp = function() {
-        try {
-            if (window.cordova && navigator.app && navigator.app.exitApp) {
-                navigator.app.exitApp();
-                return;
-            }
-            if (window.cordova && navigator.device && navigator.device.exitApp) {
-                navigator.device.exitApp();
-                return;
-            }
-            SceneManager.terminate();
-            window.location.href = "about:blank";
-        } catch (e) {}
-    };
-
+    // Funkcja zamykająca aplikację (naprawia czarny ekran na Androidzie)
     var performExit = function() {
-        AudioManager.stopAll();
-        SceneManager.goto(Scene_Title);
-        setTimeout(function() {
-            tryExitApp();
-        }, 50);
+        if (navigator.app && navigator.app.exitApp) {
+            // Dla środowiska Cordova/Android
+            navigator.app.exitApp();
+        } else if (navigator.device && navigator.device.exitApp) {
+            // Alternatywa dla innych środowisk mobilnych
+            navigator.device.exitApp();
+        } else {
+            // Standardowe wyjście dla PC i fallback dla przeglądarek
+            SceneManager.exit();
+            if (window.close) window.close();
+        }
     };
 
+    //--- Menu Główne (Title Screen) ---
     Window_TitleCommand.prototype.makeCommandList = function() {
         windowTitleCommandList.call(this);
-        this.addCommand(textExit, 'exitGame', true);
+        this.addCommand(textExit, 'exitGame');
     };
 
     Scene_Title.prototype.createCommandWindow = function () {
         sceneTitleWindow.call(this);
         this._commandWindow.setHandler('exitGame', this.commandExitGame.bind(this));
     };
-
+    
     Scene_Title.prototype.commandExitGame = function() {
         this._commandWindow.close();
         this.fadeOutAll();
         performExit();
     };
 
+    //--- Menu w grze (Game End Screen) ---
     Window_GameEnd.prototype.makeCommandList = function() {
         windowGameEndCommandList.call(this);
-        this.addCommand(textExit, 'exitGame', true);
+        this.addCommand(textExit, 'exitGame');
     };
 
     Scene_GameEnd.prototype.createCommandWindow = function() {
@@ -75,5 +70,4 @@
         this.fadeOutAll();
         performExit();
     };
-
 })();

@@ -1,4 +1,6 @@
 [
 null,
-{"id":1,"battlerName":"Actor1_1","characterIndex":0,"characterName":"teklag","classId":1,"equips":[1,1,2,3,0],"faceIndex":0,"faceName":"teklag","traits":[],"initialLevel":1,"maxLevel":99,"name":"TekLag","nickname":"","note":"","profile":"Systematyczność to jego drugie imię."}
+{"id":1,"battlerName":"","characterIndex":0,"characterName":"teklag","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"teklag","traits":[],"initialLevel":1,"maxLevel":99,"name":"TekLag","nickname":"","note":"","profile":"Systematyczność to jego drugie imię."},
+{"id":2,"battlerName":"","characterIndex":0,"characterName":"Mydralis","classId":2,"equips":[7,0,0,6,0],"faceIndex":0,"faceName":"Mydralis","traits":[],"initialLevel":15,"maxLevel":99,"name":"Mydralis","nickname":"","note":"","profile":"Przywódca ruchu Anty-Keeperowego."},
+{"id":3,"battlerName":"","characterIndex":0,"characterName":"kassper","classId":3,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"Kassper","traits":[],"initialLevel":1,"maxLevel":99,"name":"Kassper","nickname":"","note":"","profile":"Najlepszy artysta w Karambolowicach."}
 ]
