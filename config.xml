@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.chruscik.dzztandroid" version="1.1" xmlns="http://www.w3.org/ns/widgets">
-    <name>Dzień z życia TekLaga</name>
+<widget id="com.chruscik.dzztwzandroid" version="2.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Dzień z życia TekLaga: Wojownik zieleni</name>
     <description>
-        Nieoficjalny port wersji na Androida. (Wersja testowa)
+        Nieoficjalny port wersji na Androida.
     </description>
     <author email="chruscik1337@proton.me">
         Chruścik
