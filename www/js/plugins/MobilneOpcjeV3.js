@@ -1,5 +1,5 @@
 /*: 
- * @plugindesc Plugin dodaje dwie opcje dopasowania ekranu (Dopasuj ekran / 16:9) z automatycznym skalowaniem teł i centrowaniem przeciwników.
+ * @plugindesc Plugin dodaje dwie opcje dopasowania ekranu (Dopasuj ekran / 16:9) z automatycznym skalowaniem teł, centrowaniem przeciwników i obrazków.
  * @author GalaxyLIVAN
  *
  * @param NameAdapt
@@ -185,6 +185,25 @@
         }
     };
 
+    // --- 3.1. Poprawka pozycji i skalowania obrazków (Show Picture) ---
+    var _Sprite_Picture_updatePosition = Sprite_Picture.prototype.updatePosition;
+    Sprite_Picture.prototype.updatePosition = function() {
+        _Sprite_Picture_updatePosition.call(this);
+        var picture = this.picture();
+        if (picture) {
+            if (ConfigManager.adaptToScreen || ConfigManager.mobileWide) {
+                var baseX = picture.x();
+                var baseY = picture.y();
+                
+                var offsetX = (Graphics.boxWidth - 816) / 2;
+                var offsetY = (Graphics.boxHeight - 624) / 2;
+                
+                this.x = baseX + offsetX;
+                this.y = baseY + offsetY;
+            }
+        }
+    };
+
     var _Sprite_Picture_updateScale = Sprite_Picture.prototype.updateScale;
     Sprite_Picture.prototype.updateScale = function() {
         _Sprite_Picture_updateScale.call(this);
@@ -211,7 +230,6 @@
     Game_Enemy.prototype.screenX = function() {
         var x = _Game_Enemy_screenX.call(this);
         if (ConfigManager.adaptToScreen || ConfigManager.mobileWide) {
-            // Przesunięcie o połowę różnicy szerokości (centrowanie na osi X)
             x += (Graphics.boxWidth - 816) / 2;
         }
         return x;
@@ -221,7 +239,6 @@
     Game_Enemy.prototype.screenY = function() {
         var y = _Game_Enemy_screenY.call(this);
         if (ConfigManager.adaptToScreen || ConfigManager.mobileWide) {
-            // Dopasowanie do osi Y (uwzględnia czy walka to tryb Side-View czy Front-View z podesłanego screena)
             if ($gameSystem.isSideView()) {
                 y += (Graphics.boxHeight - 624);
             } else {
