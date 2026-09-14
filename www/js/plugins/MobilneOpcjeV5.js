@@ -1,5 +1,5 @@
 /*: 
- * @plugindesc Plugin dodaje dwie opcje dopasowania ekranu (Dopasuj ekran / 16:9) z automatycznym skalowaniem teł i centrowaniem przeciwników.
+ * @plugindesc Plugin dodaje dwie opcje dopasowania ekranu (Dopasuj ekran / 16:9) z automatycznym skalowaniem teł, centrowaniem przeciwników, obrazków oraz ekranów końcowych.
  * @author GalaxyLIVAN
  *
  * @param NameAdapt
@@ -185,6 +185,25 @@
         }
     };
 
+    // --- 3.1. Poprawka pozycji i skalowania obrazków (Show Picture) ---
+    var _Sprite_Picture_updatePosition = Sprite_Picture.prototype.updatePosition;
+    Sprite_Picture.prototype.updatePosition = function() {
+        _Sprite_Picture_updatePosition.call(this);
+        var picture = this.picture();
+        if (picture) {
+            if (ConfigManager.adaptToScreen || ConfigManager.mobileWide) {
+                var baseX = picture.x();
+                var baseY = picture.y();
+                
+                var offsetX = (Graphics.boxWidth - 816) / 2;
+                var offsetY = (Graphics.boxHeight - 624) / 2;
+                
+                this.x = baseX + offsetX;
+                this.y = baseY + offsetY;
+            }
+        }
+    };
+
     var _Sprite_Picture_updateScale = Sprite_Picture.prototype.updateScale;
     Sprite_Picture.prototype.updateScale = function() {
         _Sprite_Picture_updateScale.call(this);
@@ -211,7 +230,6 @@
     Game_Enemy.prototype.screenX = function() {
         var x = _Game_Enemy_screenX.call(this);
         if (ConfigManager.adaptToScreen || ConfigManager.mobileWide) {
-            // Przesunięcie o połowę różnicy szerokości (centrowanie na osi X)
             x += (Graphics.boxWidth - 816) / 2;
         }
         return x;
@@ -221,7 +239,6 @@
     Game_Enemy.prototype.screenY = function() {
         var y = _Game_Enemy_screenY.call(this);
         if (ConfigManager.adaptToScreen || ConfigManager.mobileWide) {
-            // Dopasowanie do osi Y (uwzględnia czy walka to tryb Side-View czy Front-View z podesłanego screena)
             if ($gameSystem.isSideView()) {
                 y += (Graphics.boxHeight - 624);
             } else {
@@ -230,5 +247,37 @@
         }
         return y;
     };
+
+    // --- 5. Skalowanie ekranów GameOver i MadeWithMv ---
+    
+    // Wymuszenie centrowania ekranu GameOver
+    var _Scene_Gameover_start = Scene_Gameover.prototype.start;
+    Scene_Gameover.prototype.start = function() {
+        _Scene_Gameover_start.call(this);
+        if (this._backSprite && (ConfigManager.adaptToScreen || ConfigManager.mobileWide)) {
+            var scale = getScaleRatio();
+            this._backSprite.scale.x = scale;
+            this._backSprite.scale.y = scale;
+            this._backSprite.anchor.set(0.5, 0.5);
+            this._backSprite.x = Graphics.width / 2;
+            this._backSprite.y = Graphics.height / 2;
+        }
+    };
+
+    // Wymuszenie centrowania ekranu ładującego z pluginu MadeWithMv
+    if (typeof Scene_Splash !== 'undefined') {
+        var _Scene_Splash_start = Scene_Splash.prototype.start;
+        Scene_Splash.prototype.start = function() {
+            _Scene_Splash_start.call(this);
+            if (this._sprite && (ConfigManager.adaptToScreen || ConfigManager.mobileWide)) {
+                var scale = getScaleRatio();
+                this._sprite.scale.x = scale;
+                this._sprite.scale.y = scale;
+                this._sprite.anchor.set(0.5, 0.5);
+                this._sprite.x = Graphics.width / 2;
+                this._sprite.y = Graphics.height / 2;
+            }
+        };
+    }
 
 })();
